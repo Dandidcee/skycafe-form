@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Outer circle glow -->
+  <circle cx="32" cy="32" r="30" fill="url(#glow)" opacity="0.15"/>
+  
+  <!-- Main cup silhouette -->
+  <path d="M16 28h24l-2 18c-.5 4-3.5 6-8 6h-4c-4.5 0-7.5-2-8-6l-2-18z" fill="url(#cupGrad)"/>
+  
+  <!-- Cup rim highlight -->
+  <path d="M14 26c0-1.1.9-2 2-2h20c1.1 0 2 .9 2 2v2c0 .6-.4 1-1 1H15c-.6 0-1-.4-1-1v-2z" fill="#e3beb8"/>
+  
+  <!-- Handle -->
+  <path d="M40 30c3 0 6 2 6 5s-3 5-6 5" stroke="url(#handleGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  
+  <!-- Steam curls -->
+  <path d="M22 20c0-1.5 1-2.5 1-4s-1-2.5-1-4" stroke="#e3beb8" stroke-width="1.5" stroke-linecap="round" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite"/>
+  </path>
+  <path d="M28 18c0-1.5 1-2.5 1-4s-1-2.5-1-4" stroke="#FF8F00" stroke-width="1.5" stroke-linecap="round" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;0.15;0.5" dur="2.5s" repeatCount="indefinite"/>
+  </path>
+  <path d="M34 20c0-1.5 1-2.5 1-4s-1-2.5-1-4" stroke="#e3beb8" stroke-width="1.5" stroke-linecap="round" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3.5s" repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Star accent -->
+  <circle cx="26" cy="38" r="1.2" fill="#FF8F00" opacity="0.7"/>
+  <circle cx="32" cy="35" r="0.8" fill="#e3beb8" opacity="0.5"/>
+  
+  <!-- Text arc - SKY -->
+  <text x="32" y="58" text-anchor="middle" font-family="serif" font-size="6" font-weight="700" fill="#FF8F00" letter-spacing="2">SKY</text>
+  
+  <defs>
+    <linearGradient id="cupGrad" x1="20" y1="28" x2="36" y2="52">
+      <stop offset="0%" stop-color="#FF8F00"/>
+      <stop offset="100%" stop-color="#cc7200"/>
+    </linearGradient>
+    <linearGradient id="handleGrad" x1="40" y1="30" x2="46" y2="35">
+      <stop offset="0%" stop-color="#FF8F00"/>
+      <stop offset="100%" stop-color="#e3beb8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="32" cy="32" r="30">
+      <stop offset="0%" stop-color="#FF8F00"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+</svg>

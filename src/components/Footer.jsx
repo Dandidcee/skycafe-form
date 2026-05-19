@@ -1,30 +1,31 @@
+import { motion } from 'framer-motion'
+import { WHATSAPP_LINK } from '../data/menuData'
+
 export default function Footer() {
   return (
-    <footer className="w-full py-12 px-8 md:px-16 glass-panel border-t border-white/5 mt-20">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-        <div className="flex flex-col items-center md:items-start">
-          <p className="text-xs font-bold text-primary mb-2 font-playfair">
-            SKY CAFE LUXURY ROASTERY
-          </p>
-          <p className="text-xs text-on-surface-variant opacity-40">
-            © {new Date().getFullYear()} Sky Cafe. All rights reserved.
-          </p>
+    <motion.footer
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      className="w-full py-10 px-6 md:px-12 mt-20 border-t border-white/5"
+    >
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="flex items-center gap-2">
+          <img src="/logo.svg" alt="" className="w-6 h-6 opacity-50" />
+          <span className="text-xs text-on-surface-variant/50">
+            Sky Cafe {new Date().getFullYear()}
+          </span>
         </div>
-        <div className="flex gap-8">
-          <a
-            className="text-xs text-on-surface-variant hover:text-primary transition-colors"
-            href="#"
-          >
-            Privacy Policy
-          </a>
-          <a
-            className="text-xs text-on-surface-variant hover:text-primary transition-colors"
-            href="#"
-          >
-            Terms of Service
-          </a>
-        </div>
+        <a
+          href={WHATSAPP_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-xs text-on-surface-variant/60 hover:text-secondary transition-colors"
+        >
+          <span className="material-symbols-outlined text-sm">support_agent</span>
+          Hubungi Bantuan
+        </a>
       </div>
-    </footer>
+    </motion.footer>
   )
 }

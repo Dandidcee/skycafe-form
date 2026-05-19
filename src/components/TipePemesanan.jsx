@@ -1,26 +1,27 @@
+import { motion } from 'framer-motion'
+
 const tipeOptions = [
-  { value: 'dinein', label: 'Dine In', icon: 'restaurant', desc: 'Makan di tempat' },
-  { value: 'takeaway', label: 'Takeaway', icon: 'shopping_bag', desc: 'Bawa pulang' },
-  { value: 'tempat', label: 'Booking Tempat', icon: 'event_seat', desc: 'Outdoor/Indoor/VIP' },
-  { value: 'villa', label: 'Booking Villa', icon: 'villa', desc: 'Per malam' }
+  { value: 'dinein', label: 'Makan di Tempat', icon: 'restaurant' },
+  { value: 'takeaway', label: 'Bawa Pulang', icon: 'shopping_bag' },
+  { value: 'tempat', label: 'Booking Tempat', icon: 'event_seat' },
+  { value: 'villa', label: 'Booking Villa', icon: 'villa' }
 ]
 
 export default function TipePemesanan({ value, onChange }) {
   return (
-    <div className="space-y-1">
-      <label className="text-xs uppercase tracking-widest text-on-surface-variant block">
-        Tipe Pemesanan
-      </label>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-2">
+    <div className="space-y-2">
+      <p className="text-xs text-on-surface-variant">Pilih tipe pemesanan</p>
+      <div className="grid grid-cols-2 gap-2">
         {tipeOptions.map((opt) => {
           const isActive = value === opt.value
           return (
-            <label
+            <motion.label
               key={opt.value}
-              className={`glass-panel p-4 rounded-lg cursor-pointer transition-all border ${
+              whileTap={{ scale: 0.97 }}
+              className={`flex items-center gap-3 p-3.5 rounded-xl cursor-pointer transition-colors ${
                 isActive
-                  ? 'border-secondary bg-secondary/10 shadow-lg shadow-secondary/10'
-                  : 'border-white/10 hover:border-secondary/50'
+                  ? 'bg-[#FF8F00]/10 border border-[#FF8F00]/30'
+                  : 'border border-white/5 hover:border-white/15'
               }`}
             >
               <input
@@ -31,16 +32,17 @@ export default function TipePemesanan({ value, onChange }) {
                 onChange={(e) => onChange(e.target.value)}
                 className="sr-only"
               />
-              <div className="flex flex-col items-start gap-1">
-                <span className="material-symbols-outlined text-secondary text-2xl">
-                  {opt.icon}
-                </span>
-                <span className="font-medium text-sm">{opt.label}</span>
-                <span className="text-[10px] text-on-surface-variant">
-                  {opt.desc}
-                </span>
-              </div>
-            </label>
+              <span className={`material-symbols-outlined text-xl ${
+                isActive ? 'text-[#FF8F00]' : 'text-on-surface-variant'
+              }`}>
+                {opt.icon}
+              </span>
+              <span className={`text-sm ${
+                isActive ? 'text-[#FF8F00] font-medium' : 'text-on-surface-variant'
+              }`}>
+                {opt.label}
+              </span>
+            </motion.label>
           )
         })}
       </div>

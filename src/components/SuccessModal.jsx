@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from 'framer-motion'
 import { WHATSAPP_LINK } from '../data/menuData'
 import { openReceipt } from '../utils/generateReceipt'
 
@@ -5,59 +6,67 @@ export default function SuccessModal({ open, orderId, payload, onClose }) {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop bg-black/70 backdrop-blur-sm">
-      <div className="glass-panel-heavy modal-content rounded-2xl border border-secondary/30 w-full max-w-md p-8 text-center space-y-5">
-        <div className="w-20 h-20 mx-auto rounded-full bg-secondary/10 border border-secondary/30 flex items-center justify-center">
-          <span className="material-symbols-outlined text-5xl text-secondary">check_circle</span>
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="text-2xl font-semibold font-playfair text-primary">Pesanan Terkirim!</h3>
-          <p className="text-sm text-on-surface-variant">Terima kasih, pesanan Anda telah kami terima.</p>
-        </div>
-
-        {orderId && (
-          <div className="glass-panel rounded-lg border border-white/10 p-4">
-            <p className="text-xs text-on-surface-variant mb-1">ID Pesanan</p>
-            <p className="text-sm font-mono text-secondary break-all">{orderId}</p>
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      >
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          className="glass-panel-heavy rounded-2xl w-full max-w-sm p-6 text-center space-y-5"
+        >
+          <div className="w-16 h-16 mx-auto rounded-full bg-[#FF8F00]/10 border border-[#FF8F00]/20 flex items-center justify-center">
+            <span className="material-symbols-outlined text-4xl text-[#FF8F00]">check_circle</span>
           </div>
-        )}
 
-        <p className="text-xs text-on-surface-variant">
-          Tim kami akan menghubungi Anda via WhatsApp untuk konfirmasi pesanan.
-        </p>
+          <div>
+            <h3 className="text-xl font-semibold text-primary font-playfair">Pesanan Terkirim</h3>
+            <p className="text-xs text-on-surface-variant mt-1">Tim kami akan menghubungi Anda via WhatsApp.</p>
+          </div>
 
-        <div className="flex flex-col gap-3">
-          {payload && (
-            <button
-              type="button"
-              onClick={() => openReceipt(payload)}
-              className="w-full py-3 rounded-lg border border-[#FF8F00]/40 bg-[#FF8F00]/10 hover:bg-[#FF8F00]/20 text-[#FF8F00] transition-colors flex items-center justify-center gap-2 font-medium"
-            >
-              <span className="material-symbols-outlined">receipt</span>
-              Lihat Struk
-            </button>
+          {orderId && (
+            <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5">
+              <p className="text-[10px] text-on-surface-variant">Order ID</p>
+              <p className="text-xs font-mono text-[#FF8F00] mt-0.5">{orderId}</p>
+            </div>
           )}
-          <div className="flex gap-3">
-            <a
-              href={WHATSAPP_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 py-3 rounded-lg border border-secondary/30 hover:border-secondary text-secondary transition-colors flex items-center justify-center gap-2"
-            >
-              <span className="material-symbols-outlined">chat</span>
-              WhatsApp
-            </a>
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 py-3 rounded-lg bg-[#FF8F00] hover:bg-[#E67E00] text-[#0A0A0A] font-bold transition-all active:scale-95"
-            >
-              Selesai
-            </button>
+
+          <div className="space-y-2">
+            {payload && (
+              <button
+                type="button"
+                onClick={() => openReceipt(payload)}
+                className="w-full py-3 rounded-xl border border-[#FF8F00]/20 text-[#FF8F00] text-sm font-medium hover:bg-[#FF8F00]/5 transition-colors flex items-center justify-center gap-2"
+              >
+                <span className="material-symbols-outlined text-base">receipt</span>
+                Lihat Struk
+              </button>
+            )}
+            <div className="grid grid-cols-2 gap-2">
+              <a
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-3 rounded-xl border border-white/10 text-on-surface-variant text-sm hover:border-white/20 transition-colors flex items-center justify-center gap-1.5"
+              >
+                <span className="material-symbols-outlined text-base">chat</span>
+                WhatsApp
+              </a>
+              <button
+                type="button"
+                onClick={onClose}
+                className="py-3 rounded-xl bg-[#FF8F00] text-[#0A0A0A] text-sm font-semibold hover:bg-[#E67E00] transition-colors"
+              >
+                Selesai
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   )
 }

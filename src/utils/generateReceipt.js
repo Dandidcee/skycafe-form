@@ -278,20 +278,20 @@ export function generateReceiptHTML(payload) {
       </div>
 
       <div class="note">
-        <span class="note-icon">ℹ️</span>
+        <span class="note-icon">*</span>
         <span>Total harga mungkin dikenakan biaya admin tambahan dari penyedia layanan pembayaran.</span>
       </div>
     </div>
 
     <div class="actions">
-      <button class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
-      <button class="btn btn-primary" onclick="window.close()">✓ Selesai</button>
+      <button class="btn btn-secondary" onclick="window.print()">Print</button>
+      <button class="btn btn-primary" onclick="window.close()">Selesai</button>
     </div>
 
     <div class="footer">
       <p>Pesanan akan dikonfirmasi via WhatsApp</p>
       <p><a class="wa" href="https://wa.me/6285947522947">wa.me/6285947522947</a></p>
-      <p style="margin-top:8px">Terima kasih telah memesan di Sky Cafe ☕</p>
+      <p style="margin-top:8px">Terima kasih telah memesan di Sky Cafe</p>
     </div>
   </div>
 </body>
