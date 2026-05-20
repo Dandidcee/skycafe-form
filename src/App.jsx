@@ -21,8 +21,6 @@ import { calculateDays } from './utils/format'
 import { buildOrderPayload } from './utils/buildPayload'
 import { insertOrder } from './lib/supabase'
 
-const WEBHOOK_URL = import.meta.env.VITE_WEBHOOK_URL || ''
-
 const initialPemesan = { nama: '', telepon: '', email: '' }
 const initialTempat = { tempat: '', tanggal: '', waktu: '', durasi: '', jumlahOrang: '' }
 const initialVilla = { checkIn: '', checkOut: '', jumlahTamu: '' }
@@ -104,20 +102,8 @@ export default function App() {
     console.log(JSON.stringify(pendingPayload, null, 2))
 
     try {
-      // Kirim ke Supabase + N8N webhook bersamaan
-      const tasks = [insertOrder(pendingPayload)]
-
-      if (WEBHOOK_URL) {
-        tasks.push(
-          fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(pendingPayload)
-          })
-        )
-      }
-
-      await Promise.all(tasks)
+      // Kirim ke Supabase saja, N8N listen via Realtime/Trigger
+      await insertOrder(pendingPayload)
 
       setSuccessOrderId(pendingPayload.orderId)
       setSuccessPayload(pendingPayload)
