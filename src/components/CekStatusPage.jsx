@@ -3,11 +3,10 @@ import { supabase } from '../lib/supabase'
 import { formatRupiah, formatTanggal } from '../utils/format'
 
 const statusConfig = {
-  pending: { label: 'Menunggu', color: 'text-yellow-400', bg: 'bg-yellow-400/10 border-yellow-400/30', icon: 'schedule' },
-  confirmed: { label: 'Dikonfirmasi', color: 'text-blue-400', bg: 'bg-blue-400/10 border-blue-400/30', icon: 'thumb_up' },
-  processing: { label: 'Diproses', color: 'text-orange-400', bg: 'bg-orange-400/10 border-orange-400/30', icon: 'sync' },
-  paid: { label: 'Sudah Dibayar', color: 'text-green-400', bg: 'bg-green-400/10 border-green-400/30', icon: 'payments' },
-  completed: { label: 'Selesai', color: 'text-green-400', bg: 'bg-green-400/10 border-green-400/30', icon: 'check_circle' },
+  pending: { label: 'Menunggu Dikonfirmasi', color: 'text-yellow-400', bg: 'bg-yellow-400/10 border-yellow-400/30', icon: 'schedule' },
+  confirmed: { label: 'Menunggu Pembayaran', color: 'text-blue-400', bg: 'bg-blue-400/10 border-blue-400/30', icon: 'payments' },
+  paid: { label: 'Pesanan Sedang Dibuat', color: 'text-orange-400', bg: 'bg-orange-400/10 border-orange-400/30', icon: 'restaurant' },
+  completed: { label: 'Pesanan Selesai', color: 'text-green-400', bg: 'bg-green-400/10 border-green-400/30', icon: 'check_circle' },
   cancelled: { label: 'Dibatalkan', color: 'text-red-400', bg: 'bg-red-400/10 border-red-400/30', icon: 'cancel' }
 }
 
