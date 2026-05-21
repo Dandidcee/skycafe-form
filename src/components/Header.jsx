@@ -5,7 +5,6 @@ const menuItems = [
   { id: 'order', label: 'Pesan', icon: 'shopping_cart' },
   { id: 'menu', label: 'Menu', icon: 'restaurant_menu' },
   { id: 'galeri', label: 'Galeri', icon: 'photo_library' },
-  { id: 'ulasan', label: 'Ulasan', icon: 'reviews' },
   { id: 'cek-status', label: 'Status', icon: 'receipt_long' },
 ]
 

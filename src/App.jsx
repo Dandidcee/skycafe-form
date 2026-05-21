@@ -11,7 +11,6 @@ import SuccessModal from './components/SuccessModal'
 import MenuPage from './components/MenuPage'
 import GaleriPage from './components/GaleriPage'
 import CekStatusPage from './components/CekStatusPage'
-import UlasanPage from './components/UlasanPage'
 import Footer from './components/Footer'
 import PageTransition from './components/PageTransition'
 import { buildOrderPayload } from './utils/buildPayload'
@@ -141,7 +140,6 @@ export default function App() {
     switch (currentPage) {
       case 'menu': return <MenuPage />
       case 'galeri': return <GaleriPage />
-      case 'ulasan': return <UlasanPage />
       case 'cek-status': return <CekStatusPage />
       default: return renderOrderPage()
     }
