@@ -2,9 +2,7 @@ import { motion } from 'framer-motion'
 
 const tipeOptions = [
   { value: 'dinein', label: 'Makan di Tempat', icon: 'restaurant' },
-  { value: 'takeaway', label: 'Bawa Pulang', icon: 'shopping_bag' },
-  { value: 'tempat', label: 'Booking Tempat', icon: 'event_seat' },
-  { value: 'villa', label: 'Booking Villa', icon: 'villa' }
+  { value: 'takeaway', label: 'Bawa Pulang', icon: 'shopping_bag' }
 ]
 
 export default function TipePemesanan({ value, onChange }) {

@@ -4,8 +4,6 @@ import BackgroundFX from './components/BackgroundFX'
 import WelcomeBanner from './components/WelcomeBanner'
 import TipePemesanan from './components/TipePemesanan'
 import DataPemesan from './components/DataPemesan'
-import BookingTempatFields from './components/BookingTempatFields'
-import BookingVillaFields from './components/BookingVillaFields'
 import MenuPicker from './components/MenuPicker'
 import Summary from './components/Summary'
 import ConfirmModal from './components/ConfirmModal'
@@ -16,21 +14,15 @@ import CekStatusPage from './components/CekStatusPage'
 import UlasanPage from './components/UlasanPage'
 import Footer from './components/Footer'
 import PageTransition from './components/PageTransition'
-import { tempatBooking, villaBooking } from './data/menuData'
-import { calculateDays } from './utils/format'
 import { buildOrderPayload } from './utils/buildPayload'
 import { insertOrder } from './lib/supabase'
 
 const initialPemesan = { nama: '', telepon: '', email: '' }
-const initialTempat = { tempat: '', tanggal: '', waktu: '', durasi: '', jumlahOrang: '' }
-const initialVilla = { checkIn: '', checkOut: '', jumlahTamu: '' }
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('order')
   const [tipe, setTipe] = useState('dinein')
   const [pemesan, setPemesan] = useState(initialPemesan)
-  const [bookingTempat, setBookingTempat] = useState(initialTempat)
-  const [bookingVilla, setBookingVilla] = useState(initialVilla)
   const [selectedItems, setSelectedItems] = useState([])
   const [catatan, setCatatan] = useState('')
 
@@ -40,45 +32,15 @@ export default function App() {
   const [successPayload, setSuccessPayload] = useState(null)
   const [errorMsg, setErrorMsg] = useState('')
 
-  const durasi = parseInt(bookingTempat.durasi) || 0
-  const jumlahMalam = calculateDays(bookingVilla.checkIn, bookingVilla.checkOut)
-
   const subtotal = useMemo(() => {
-    const menuTotal = selectedItems.reduce((s, i) => s + i.harga * i.qty, 0)
-    let bookingTotal = 0
-    if (tipe === 'tempat') {
-      const t = tempatBooking.find((x) => x.id === bookingTempat.tempat)
-      bookingTotal = t ? t.hargaPerJam * durasi : 0
-    } else if (tipe === 'villa') {
-      bookingTotal = villaBooking.hargaPerMalam * jumlahMalam
-    }
-    return menuTotal + bookingTotal
-  }, [selectedItems, tipe, bookingTempat, durasi, jumlahMalam])
+    return selectedItems.reduce((s, i) => s + i.harga * i.qty, 0)
+  }, [selectedItems])
 
   const validateBeforeConfirm = () => {
     setErrorMsg('')
     if (!pemesan.nama.trim()) return 'Nama lengkap wajib diisi.'
     if (!pemesan.telepon.trim()) return 'Nomor WhatsApp wajib diisi.'
-
-    if (tipe === 'tempat') {
-      if (!bookingTempat.tempat) return 'Pilih tempat booking terlebih dahulu.'
-      if (!bookingTempat.tanggal) return 'Tanggal booking wajib diisi.'
-      if (!bookingTempat.waktu) return 'Jam mulai wajib diisi.'
-      if (!bookingTempat.durasi) return 'Durasi wajib diisi.'
-      if (!bookingTempat.jumlahOrang) return 'Jumlah orang wajib diisi.'
-    }
-
-    if (tipe === 'villa') {
-      if (!bookingVilla.checkIn) return 'Tanggal check-in wajib diisi.'
-      if (!bookingVilla.checkOut) return 'Tanggal check-out wajib diisi.'
-      if (jumlahMalam <= 0) return 'Tanggal check-out harus setelah check-in.'
-      if (!bookingVilla.jumlahTamu) return 'Jumlah tamu wajib diisi.'
-    }
-
-    if ((tipe === 'dinein' || tipe === 'takeaway') && selectedItems.length === 0) {
-      return 'Pilih minimal satu menu.'
-    }
-
+    if (selectedItems.length === 0) return 'Pilih minimal satu menu.'
     return null
   }
 
@@ -89,7 +51,7 @@ export default function App() {
       setErrorMsg(error)
       return
     }
-    const payload = buildOrderPayload({ tipe, pemesan, selectedItems, bookingTempat, bookingVilla, catatan })
+    const payload = buildOrderPayload({ tipe, pemesan, selectedItems, bookingTempat: {}, bookingVilla: {}, catatan })
     setPendingPayload(payload)
   }
 
@@ -102,7 +64,6 @@ export default function App() {
     console.log(JSON.stringify(pendingPayload, null, 2))
 
     try {
-      // Kirim ke Supabase saja, N8N listen via Realtime/Trigger
       await insertOrder(pendingPayload)
 
       setSuccessOrderId(pendingPayload.orderId)
@@ -110,8 +71,6 @@ export default function App() {
       setPendingPayload(null)
       setTipe('dinein')
       setPemesan(initialPemesan)
-      setBookingTempat(initialTempat)
-      setBookingVilla(initialVilla)
       setSelectedItems([])
       setCatatan('')
     } catch (err) {
@@ -136,13 +95,6 @@ export default function App() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <TipePemesanan value={tipe} onChange={setTipe} />
               <DataPemesan data={pemesan} onChange={setPemesan} />
-
-              {tipe === 'tempat' && (
-                <BookingTempatFields data={bookingTempat} onChange={setBookingTempat} />
-              )}
-              {tipe === 'villa' && (
-                <BookingVillaFields data={bookingVilla} onChange={setBookingVilla} />
-              )}
 
               <MenuPicker selectedItems={selectedItems} onChange={setSelectedItems} />
 
@@ -178,11 +130,7 @@ export default function App() {
           <Summary
             tipe={tipe}
             selectedItems={selectedItems}
-            bookingTempat={bookingTempat}
-            bookingVilla={bookingVilla}
             subtotal={subtotal}
-            jumlahMalam={jumlahMalam}
-            durasi={durasi}
           />
         </div>
       </div>

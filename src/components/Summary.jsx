@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion'
 import { formatRupiah } from '../utils/format'
-import { tempatBooking, villaBooking, BIAYA_LAYANAN } from '../data/menuData'
+import { BIAYA_LAYANAN } from '../data/menuData'
 
-export default function Summary({ tipe, selectedItems, bookingTempat, bookingVilla, subtotal, jumlahMalam, durasi }) {
+export default function Summary({ tipe, selectedItems, subtotal }) {
   const total = subtotal + BIAYA_LAYANAN
-  const tempatInfo = tempatBooking.find((t) => t.id === bookingTempat.tempat)
-  const tipeLabel = { dinein: 'Makan di Tempat', takeaway: 'Bawa Pulang', tempat: 'Booking Tempat', villa: 'Booking Villa' }[tipe]
+  const tipeLabel = { dinein: 'Makan di Tempat', takeaway: 'Bawa Pulang' }[tipe]
 
   return (
     <motion.div
@@ -24,20 +23,6 @@ export default function Summary({ tipe, selectedItems, bookingTempat, bookingVil
           <span className="text-on-surface-variant">Tipe</span>
           <span className="text-primary">{tipeLabel}</span>
         </div>
-
-        {tipe === 'tempat' && tempatInfo && durasi > 0 && (
-          <div className="flex justify-between">
-            <span className="text-on-surface-variant">{tempatInfo.nama} ({durasi} jam)</span>
-            <span className="text-secondary">{formatRupiah(tempatInfo.hargaPerJam * durasi)}</span>
-          </div>
-        )}
-
-        {tipe === 'villa' && jumlahMalam > 0 && (
-          <div className="flex justify-between">
-            <span className="text-on-surface-variant">Villa ({jumlahMalam} malam)</span>
-            <span className="text-secondary">{formatRupiah(villaBooking.hargaPerMalam * jumlahMalam)}</span>
-          </div>
-        )}
 
         {selectedItems.length > 0 && (
           <div className="space-y-1.5 pt-2 border-t border-white/5">
