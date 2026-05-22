@@ -11,6 +11,7 @@ Jalankan file SQL ini secara **berurutan** di [Supabase SQL Editor](https://supa
 | 3 | `03-gallery.sql` | Tabel foto galeri |
 | 4 | `04-settings.sql` | Tabel pengaturan cafe (nama, logo, WA, dll) |
 | 5 | `05-storage.sql` | Storage bucket untuk upload gambar |
+| 6 | `06-policies.sql` | RLS policies untuk tabel orders |
 
 ## Urutan Penting!
 
