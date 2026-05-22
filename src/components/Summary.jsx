@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion'
 import { formatRupiah } from '../utils/format'
-import { BIAYA_LAYANAN } from '../data/menuData'
+import { useSettings } from '../lib/SettingsContext'
 
 export default function Summary({ tipe, selectedItems, subtotal }) {
-  const total = subtotal + BIAYA_LAYANAN
+  const { settings } = useSettings()
+  const biayaLayanan = parseInt(settings.biaya_layanan) || 0
+  const total = subtotal + biayaLayanan
   const tipeLabel = { dinein: 'Makan di Tempat', takeaway: 'Bawa Pulang' }[tipe]
 
   return (
@@ -42,7 +44,7 @@ export default function Summary({ tipe, selectedItems, subtotal }) {
           </div>
           <div className="flex justify-between text-xs">
             <span className="text-on-surface-variant">Biaya layanan</span>
-            <span>{formatRupiah(BIAYA_LAYANAN)}</span>
+            <span>{formatRupiah(biayaLayanan)}</span>
           </div>
           <div className="flex justify-between pt-2 border-t border-white/5">
             <span className="text-xs text-on-surface-variant">Total</span>

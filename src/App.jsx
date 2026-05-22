@@ -15,10 +15,12 @@ import Footer from './components/Footer'
 import PageTransition from './components/PageTransition'
 import { buildOrderPayload } from './utils/buildPayload'
 import { insertOrder } from './lib/supabase'
+import { useSettings } from './lib/SettingsContext'
 
 const initialPemesan = { nama: '', telepon: '', email: '' }
 
 export default function App() {
+  const { settings } = useSettings()
   const [currentPage, setCurrentPage] = useState('order')
   const [tipe, setTipe] = useState('dinein')
   const [pemesan, setPemesan] = useState(initialPemesan)
@@ -50,7 +52,14 @@ export default function App() {
       setErrorMsg(error)
       return
     }
-    const payload = buildOrderPayload({ tipe, pemesan, selectedItems, bookingTempat: {}, bookingVilla: {}, catatan })
+    const payload = buildOrderPayload({
+      tipe,
+      pemesan,
+      selectedItems,
+      catatan,
+      biayaLayanan: parseInt(settings.biaya_layanan) || 0,
+      whatsappNumber: settings.whatsapp_number
+    })
     setPendingPayload(payload)
   }
 

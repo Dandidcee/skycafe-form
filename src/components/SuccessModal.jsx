@@ -1,8 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { WHATSAPP_LINK } from '../data/menuData'
+import { useSettings } from '../lib/SettingsContext'
 import { openReceipt } from '../utils/generateReceipt'
 
 export default function SuccessModal({ open, orderId, payload, onClose }) {
+  const { settings } = useSettings()
+  const waLink = `https://wa.me/${settings.whatsapp_number}`
   if (!open) return null
 
   return (
@@ -48,7 +50,7 @@ export default function SuccessModal({ open, orderId, payload, onClose }) {
             )}
             <div className="grid grid-cols-2 gap-2">
               <a
-                href={WHATSAPP_LINK}
+                href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="py-3 rounded-xl border border-white/10 text-on-surface-variant text-sm hover:border-white/20 transition-colors flex items-center justify-center gap-1.5"

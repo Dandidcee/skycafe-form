@@ -1,6 +1,3 @@
-// Biaya layanan tetap (fallback, bisa di-override dari settings)
-export const BIAYA_LAYANAN = 4000
-
-// WhatsApp (fallback, bisa di-override dari settings)
-export const WHATSAPP_NUMBER = '6285947522947'
-export const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}`
+// File ini sudah tidak dipakai langsung.
+// Semua value sekarang diambil dari tabel 'settings' di Supabase via SettingsContext.
+// File ini disimpan sebagai referensi fallback saja.

@@ -1,14 +1,16 @@
-import { BIAYA_LAYANAN, WHATSAPP_NUMBER } from '../data/menuData'
 import { generateOrderId } from './format'
 
 /**
  * Build structured JSON payload for Supabase
+ * biayaLayanan dan whatsappNumber diambil dari settings (Supabase)
  */
 export function buildOrderPayload({
   tipe,
   pemesan,
   selectedItems,
-  catatan
+  catatan,
+  biayaLayanan,
+  whatsappNumber
 }) {
   const orderId = generateOrderId()
   const timestamp = new Date().toISOString()
@@ -24,7 +26,6 @@ export function buildOrderPayload({
   const menuSubtotal = menuItems.reduce((sum, i) => sum + i.subtotal, 0)
 
   const subtotal = menuSubtotal
-  const biayaLayanan = BIAYA_LAYANAN
   const total = subtotal + biayaLayanan
 
   const payload = {
@@ -51,7 +52,7 @@ export function buildOrderPayload({
     },
     konfirmasi: {
       channel: 'whatsapp',
-      nomor: WHATSAPP_NUMBER
+      nomor: whatsappNumber
     }
   }
 
