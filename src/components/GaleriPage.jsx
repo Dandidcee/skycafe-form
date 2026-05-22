@@ -1,20 +1,44 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { supabase } from '../lib/supabase'
 import { staggerContainer, staggerItem } from './PageTransition'
 
-const galleryImages = [
-  { src: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=400&fit=crop', caption: 'Suasana Indoor' },
-  { src: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&h=400&fit=crop', caption: 'Area Outdoor' },
-  { src: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop', caption: 'Signature Coffee' },
-  { src: 'https://images.unsplash.com/photo-1559305616-3f99cd43e353?w=600&h=400&fit=crop', caption: 'VIP Room' },
-  { src: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=600&h=400&fit=crop', caption: 'Villa View' },
-  { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop', caption: 'Dessert Selection' },
-  { src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop', caption: 'Interior' },
-  { src: 'https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=600&h=400&fit=crop', caption: 'Coffee Bar' },
-]
-
 export default function GaleriPage() {
+  const [photos, setPhotos] = useState([])
   const [selected, setSelected] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchGallery()
+  }, [])
+
+  const fetchGallery = async () => {
+    const { data } = await supabase
+      .from('gallery')
+      .select('*')
+      .order('urutan')
+      .order('created_at', { ascending: false })
+
+    setPhotos(data || [])
+    setLoading(false)
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <span className="material-symbols-outlined animate-spin text-secondary text-3xl">progress_activity</span>
+      </div>
+    )
+  }
+
+  if (photos.length === 0) {
+    return (
+      <div className="text-center py-16">
+        <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">photo_library</span>
+        <p className="text-on-surface-variant">Belum ada foto di galeri.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8">
@@ -40,9 +64,9 @@ export default function GaleriPage() {
         animate="animate"
         className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"
       >
-        {galleryImages.map((img, idx) => (
+        {photos.map((img) => (
           <motion.button
-            key={idx}
+            key={img.id}
             variants={staggerItem}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -50,18 +74,20 @@ export default function GaleriPage() {
             className="relative rounded-2xl overflow-hidden aspect-[4/3] group"
           >
             <img
-              src={img.src}
-              alt={img.caption}
+              src={img.url}
+              alt={img.caption || ''}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <motion.span
-              initial={false}
-              className="absolute bottom-3 left-3 text-xs text-white font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              {img.caption}
-            </motion.span>
+            {img.caption && (
+              <motion.span
+                initial={false}
+                className="absolute bottom-3 left-3 text-xs text-white font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                {img.caption}
+              </motion.span>
+            )}
           </motion.button>
         ))}
       </motion.div>
@@ -84,9 +110,9 @@ export default function GaleriPage() {
               className="max-w-4xl w-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <img src={selected.src} alt={selected.caption} className="w-full rounded-2xl" />
+              <img src={selected.url} alt={selected.caption || ''} className="w-full rounded-2xl" />
               <div className="flex justify-between items-center mt-4">
-                <p className="text-primary text-sm">{selected.caption}</p>
+                <p className="text-primary text-sm">{selected.caption || ''}</p>
                 <button onClick={() => setSelected(null)} className="text-on-surface-variant hover:text-primary">
                   <span className="material-symbols-outlined">close</span>
                 </button>

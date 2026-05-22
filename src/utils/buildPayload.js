@@ -1,16 +1,13 @@
-import { tempatBooking, villaBooking, BIAYA_LAYANAN, WHATSAPP_NUMBER } from '../data/menuData'
-import { generateOrderId, calculateDays } from './format'
+import { BIAYA_LAYANAN, WHATSAPP_NUMBER } from '../data/menuData'
+import { generateOrderId } from './format'
 
 /**
- * Build structured JSON payload for N8N webhook / Supabase / Google Sheets
- * Midtrans akan diproses oleh N8N berdasarkan payload ini.
+ * Build structured JSON payload for Supabase
  */
 export function buildOrderPayload({
   tipe,
   pemesan,
   selectedItems,
-  bookingTempat,
-  bookingVilla,
   catatan
 }) {
   const orderId = generateOrderId()
@@ -26,45 +23,7 @@ export function buildOrderPayload({
   }))
   const menuSubtotal = menuItems.reduce((sum, i) => sum + i.subtotal, 0)
 
-  // Booking tempat
-  let bookingTempatSection = null
-  let tempatSubtotal = 0
-  if (tipe === 'tempat') {
-    const tempatInfo = tempatBooking.find((t) => t.id === bookingTempat.tempat)
-    const durasi = parseInt(bookingTempat.durasi) || 0
-    tempatSubtotal = tempatInfo ? tempatInfo.hargaPerJam * durasi : 0
-    bookingTempatSection = {
-      tempatId: bookingTempat.tempat,
-      namaTempat: tempatInfo ? tempatInfo.nama : null,
-      tanggal: bookingTempat.tanggal,
-      waktu: bookingTempat.waktu,
-      durasiJam: durasi,
-      jumlahOrang: bookingTempat.jumlahOrang,
-      hargaPerJam: tempatInfo ? tempatInfo.hargaPerJam : 0,
-      subtotal: tempatSubtotal
-    }
-  }
-
-  // Booking villa
-  let bookingVillaSection = null
-  let villaSubtotal = 0
-  if (tipe === 'villa') {
-    const jumlahMalam = calculateDays(bookingVilla.checkIn, bookingVilla.checkOut)
-    villaSubtotal = villaBooking.hargaPerMalam * jumlahMalam
-    bookingVillaSection = {
-      namaVilla: villaBooking.nama,
-      checkIn: bookingVilla.checkIn,
-      checkOut: bookingVilla.checkOut,
-      jumlahMalam,
-      jumlahTamu: bookingVilla.jumlahTamu,
-      hargaPerMalam: villaBooking.hargaPerMalam,
-      kapasitas: villaBooking.kapasitas,
-      fasilitas: villaBooking.fasilitas,
-      subtotal: villaSubtotal
-    }
-  }
-
-  const subtotal = menuSubtotal + tempatSubtotal + villaSubtotal
+  const subtotal = menuSubtotal
   const biayaLayanan = BIAYA_LAYANAN
   const total = subtotal + biayaLayanan
 
@@ -80,8 +39,8 @@ export function buildOrderPayload({
     },
     pemesanan: {
       tipe,
-      bookingTempat: bookingTempatSection,
-      bookingVilla: bookingVillaSection,
+      bookingTempat: null,
+      bookingVilla: null,
       menu: menuItems.length > 0
         ? { items: menuItems, subtotal: menuSubtotal, jumlahItem: menuItems.reduce((s, i) => s + i.qty, 0) }
         : null,

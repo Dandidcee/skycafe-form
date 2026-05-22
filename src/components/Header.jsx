@@ -31,7 +31,7 @@ export default function Header({ onNavigate, currentPage }) {
           whileTap={{ scale: 0.98 }}
           className="flex items-center gap-2.5"
         >
-          <img src="/logo.svg" alt="Sky Cafe" className="w-9 h-9" />
+          <img src="/logo.png" alt="Sky Cafe" className="w-9 h-9 rounded-full" />
           <span className="text-lg font-bold text-[#FF8F00] font-playfair tracking-wide">SKY</span>
         </motion.button>
 

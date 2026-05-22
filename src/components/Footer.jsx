@@ -11,7 +11,7 @@ export default function Footer() {
     >
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-2">
-          <img src="/logo.svg" alt="" className="w-6 h-6 opacity-50" />
+          <img src="/logo.png" alt="" className="w-6 h-6 opacity-50" />
           <span className="text-xs text-on-surface-variant/50">
             Sky Cafe {new Date().getFullYear()}
           </span>

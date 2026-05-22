@@ -1,15 +1,38 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { menuData, kategoriMenu } from '../data/menuData'
+import { supabase } from '../lib/supabase'
 import { formatRupiah } from '../utils/format'
 
 export default function MenuPicker({ selectedItems, onChange }) {
+  const [menuData, setMenuData] = useState([])
+  const [kategoriMenu, setKategoriMenu] = useState(['Semua'])
   const [activeCategory, setActiveCategory] = useState('Semua')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchMenu()
+  }, [])
+
+  const fetchMenu = async () => {
+    const { data } = await supabase
+      .from('menu_items')
+      .select('*')
+      .eq('tersedia', true)
+      .order('urutan')
+      .order('kategori')
+
+    if (data) {
+      setMenuData(data)
+      const cats = ['Semua', ...new Set(data.map((d) => d.kategori))]
+      setKategoriMenu(cats)
+    }
+    setLoading(false)
+  }
 
   const filteredMenu = useMemo(() => {
     if (activeCategory === 'Semua') return menuData
     return menuData.filter((m) => m.kategori === activeCategory)
-  }, [activeCategory])
+  }, [activeCategory, menuData])
 
   const getQty = (nama) => {
     const found = selectedItems.find((i) => i.nama === nama)
@@ -23,13 +46,21 @@ export default function MenuPicker({ selectedItems, onChange }) {
     if (next === 0) {
       updated = selectedItems.filter((i) => i.nama !== item.nama)
     } else if (current === 0) {
-      updated = [...selectedItems, { ...item, qty: next }]
+      updated = [...selectedItems, { nama: item.nama, kategori: item.kategori, harga: item.harga, qty: next }]
     } else {
       updated = selectedItems.map((i) =>
         i.nama === item.nama ? { ...i, qty: next } : i
       )
     }
     onChange(updated)
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <span className="material-symbols-outlined animate-spin text-secondary">progress_activity</span>
+      </div>
+    )
   }
 
   return (
@@ -54,7 +85,7 @@ export default function MenuPicker({ selectedItems, onChange }) {
         ))}
       </div>
 
-      {/* Grid layout — compact cards instead of long list */}
+      {/* Grid layout */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-80 overflow-y-auto menu-scroll pr-1">
         <AnimatePresence mode="popLayout">
           {filteredMenu.map((item) => {
@@ -77,7 +108,6 @@ export default function MenuPicker({ selectedItems, onChange }) {
                 <p className="text-xs text-on-surface truncate font-medium">{item.nama}</p>
                 <p className="text-[10px] text-on-surface-variant mt-0.5">{formatRupiah(item.harga)}</p>
                 
-                {/* Quantity controls */}
                 <div className="flex items-center justify-between mt-2">
                   <button
                     type="button"
