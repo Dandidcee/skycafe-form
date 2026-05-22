@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion'
-import { WHATSAPP_LINK } from '../data/menuData'
+import { useSettings } from '../lib/SettingsContext'
 
 export default function Footer() {
+  const { settings } = useSettings()
+  const waLink = `https://wa.me/${settings.whatsapp_number}`
+
   return (
     <motion.footer
       initial={{ opacity: 0 }}
@@ -11,13 +14,13 @@ export default function Footer() {
     >
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-2">
-          <img src="/logo.png" alt="" className="w-6 h-6 opacity-50" />
+          <img src={settings.logo_url} alt="" className="w-6 h-6 opacity-50 rounded-full object-cover" />
           <span className="text-xs text-on-surface-variant/50">
-            Sky Cafe {new Date().getFullYear()}
+            {settings.cafe_name} {new Date().getFullYear()}
           </span>
         </div>
         <a
-          href={WHATSAPP_LINK}
+          href={waLink}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 text-xs text-on-surface-variant/60 hover:text-secondary transition-colors"

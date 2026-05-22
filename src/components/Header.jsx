@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useSettings } from '../lib/SettingsContext'
 
 const menuItems = [
   { id: 'order', label: 'Pesan', icon: 'shopping_cart' },
@@ -10,6 +11,7 @@ const menuItems = [
 
 export default function Header({ onNavigate, currentPage }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const { settings } = useSettings()
 
   const handleNav = (id) => {
     onNavigate(id)
@@ -31,8 +33,8 @@ export default function Header({ onNavigate, currentPage }) {
           whileTap={{ scale: 0.98 }}
           className="flex items-center gap-2.5"
         >
-          <img src="/logo.png" alt="Sky Cafe" className="w-9 h-9 rounded-full" />
-          <span className="text-lg font-bold text-[#FF8F00] font-playfair tracking-wide">SKY</span>
+          <img src={settings.logo_url} alt={settings.cafe_name} className="w-9 h-9 rounded-full object-cover" />
+          <span className="text-lg font-bold text-[#FF8F00] font-playfair tracking-wide">{settings.cafe_name}</span>
         </motion.button>
 
         {/* Desktop nav */}
